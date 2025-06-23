@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import styles from '~/styles/upload.module.css';
+
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
 
@@ -10,21 +12,21 @@ const UploadPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: '40px auto', textAlign: 'center' }}>
+    <div className={styles.container}>
       <h1>音声ファイルアップロード</h1>
       <input
         type="file"
         accept=".mp3,.wav,audio/*"
         onChange={handleFileChange}
-        style={{ marginBottom: 16 }}
+        className={styles.fileInput}
       />
       {file && (
-        <div style={{ marginTop: 16 }}>
+        <div className={styles.fileInfo}>
           <p>選択されたファイル: {file.name}</p>
           <audio
             controls
             src={URL.createObjectURL(file)}
-            style={{ width: '100%' }}
+            className={styles.audioPlayer}
           />
         </div>
       )}
