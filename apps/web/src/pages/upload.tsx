@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -10,7 +10,7 @@ const UploadPage = () => {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "40px auto", textAlign: "center" }}>
+    <div style={{ maxWidth: 400, margin: '40px auto', textAlign: 'center' }}>
       <h1>音声ファイルアップロード</h1>
       <input
         type="file"
@@ -21,7 +21,11 @@ const UploadPage = () => {
       {file && (
         <div style={{ marginTop: 16 }}>
           <p>選択されたファイル: {file.name}</p>
-          <audio controls src={URL.createObjectURL(file)} style={{ width: "100%" }} />
+          <audio
+            controls
+            src={URL.createObjectURL(file)}
+            style={{ width: '100%' }}
+          />
         </div>
       )}
     </div>
