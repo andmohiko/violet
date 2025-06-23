@@ -9,6 +9,11 @@ export default [
   js.configs.recommended,
   prettier,
   {
+    env: {
+      node: true,
+    },
+  },
+  {
     files: ['apps/**/*.{ts,tsx,js,jsx}'], // ← apps以下のみ
     languageOptions: {
       parser,
