@@ -1,0 +1,32 @@
+{
+  "name": "firebase-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "console": "pnpm -F \"console\"",
+    "web": "pnpm -F \"web\"",
+    "functions": "pnpm -F \"functions\"",
+    "common": "pnpm -F \"common\"",
+    "dev": "turbo run dev --no-cache --parallel --continue",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "clean": "turbo run clean && rimraf node_modules",
+    "format": "prettier --write .",
+    "cspell": "cspell -c ./cspell.json './apps/*/src/**/*' './packages/*/src/**/*'"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "cspell": "^8.18.1",
+    "rimraf": "^6.0.1",
+    "turbo": "^2.4.4"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=6.0.0"
+  }
+}
