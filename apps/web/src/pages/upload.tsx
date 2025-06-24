@@ -23,7 +23,7 @@ const UploadPage = () => {
       setUploadedUrl(url);
       alert('アップロード完了');
     } catch (e) {
-      alert('アップロード失敗');
+      console.error('アップロード失敗', e);
     }
     setUploading(false);
   };
