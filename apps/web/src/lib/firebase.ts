@@ -22,7 +22,7 @@ if (getApps().length > 0) {
   await deleteApp(getApps()[0]);
 }
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp({ ...firebaseConfig });
 
 const auth = getAuth(app);
 auth.languageCode = 'ja';
