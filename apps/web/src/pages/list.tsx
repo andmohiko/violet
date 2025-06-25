@@ -6,7 +6,7 @@ type Transcript = {
   id: string;
   audioUrl: string;
   text: string;
-  createdAt?: any;
+  timeCreated?: any;
   uploadedBy?: string;
 };
 
@@ -40,7 +40,9 @@ const ListPage = () => {
 
   const formatDate = (date: any) => {
     if (!date) return '-';
-
+    // Firestore Timestamp型の場合
+    if (date.toDate) return date.toDate().toLocaleString();
+    // ISO文字列や数値の場合
     return new Date(date).toLocaleString();
   };
 
@@ -59,7 +61,7 @@ const ListPage = () => {
           (searched ? filtered : transcripts).map((t) => (
             <li key={t.id}>
               <button onClick={() => setOpenId(openId === t.id ? null : t.id)}>
-                {formatDate(t.createdAt)}
+                {t.timeCreated}
               </button>
               {openId === t.id && (
                 <div style={{ marginTop: 8, marginBottom: 8 }}>
