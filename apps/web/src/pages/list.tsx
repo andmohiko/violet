@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useFirestore } from '~/providers/DbProvider';
+import Search from '~/components/search';
 
 type Transcript = {
   id: string;
@@ -12,8 +13,10 @@ type Transcript = {
 const ListPage = () => {
   const { getAllDocuments } = useFirestore();
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
+  const [filtered, setFiltered] = useState<Transcript[]>([]);
   const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [searched, setSearched] = useState(false);
 
   useEffect(() => {
     const fetchTranscripts = async () => {
@@ -29,20 +32,31 @@ const ListPage = () => {
     fetchTranscripts();
   }, [getAllDocuments]);
 
+  const handleSearch = (results: Transcript[]) => {
+    setFiltered(results);
+    setSearched(true);
+    setOpenId(null);
+  };
+
   const formatDate = (date: any) => {
     if (!date) return '-';
 
     return new Date(date).toLocaleString();
   };
 
+  useEffect(() => {
+    setFiltered(transcripts);
+  }, [transcripts]);
+
   return (
     <div>
-      <h1>Transcripts一覧</h1>
-      {loading ? (
-        <p>読み込み中...</p>
-      ) : (
-        <ul>
-          {transcripts.map((t) => (
+      <h1>Transcripts検索</h1>
+      <Search transcripts={transcripts} onResult={handleSearch} />
+      <ul>
+        {(searched ? filtered : transcripts).length === 0 ? (
+          <p>該当するデータがありません。</p>
+        ) : (
+          (searched ? filtered : transcripts).map((t) => (
             <li key={t.id}>
               <button onClick={() => setOpenId(openId === t.id ? null : t.id)}>
                 {formatDate(t.createdAt)}
@@ -58,9 +72,9 @@ const ListPage = () => {
               )}
               <hr />
             </li>
-          ))}
-        </ul>
-      )}
+          ))
+        )}
+      </ul>
     </div>
   );
 };
