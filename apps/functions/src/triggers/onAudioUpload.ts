@@ -12,19 +12,25 @@ import {
 
 const bucketName = process.env.STORAGE_BUCKET;
 const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
+  apiKey: process.env.DEV_GEMINI_API_KEY,
 });
 
-//firestoreage上の音声データを一時ファイルとしてダウンロードする関数
+//firestoreage上の音声データを一時ファイルとしてダウンロードし、storage上に保存された日時を読み取る関数
 export async function downloadAudioFromStorage(
   filePath: string,
-): Promise<string> {
+): Promise<{ tempFilePath: string; timeCreated: string | undefined }> {
   const bucket = getStorage().bucket(bucketName);
+  const [metadata] = await bucket.file(filePath).getMetadata();
+  // メタデータから作成日時を取得
+  let timeCreated: string | undefined = undefined;
+  if (metadata.timeCreated) {
+    timeCreated = new Date(metadata.timeCreated).toLocaleString('ja-JP');
+  }
   const tempFilePath = path.join(os.tmpdir(), path.basename(filePath));
   console.log(`Downloading ${filePath} to ${tempFilePath}`);
   await bucket.file(filePath).download({ destination: tempFilePath });
   console.log(`Downloaded ${filePath} successfully.`);
-  return tempFilePath;
+  return { tempFilePath, timeCreated };
 }
 
 export const onAudioUpload = onObjectFinalized(
@@ -35,13 +41,14 @@ export const onAudioUpload = onObjectFinalized(
   async function main(event) {
     const filePath = event.data.name;
     const contentType = event.data.contentType ?? 'application/octet-stream';
-    const createdAt = event.data.timeCreated;
     const firebaseAudioUrl = `gs://${event.data.bucket}/${filePath}`;
-    console.log('onAudioUpload:', { filePath, contentType, createdAt });
+    console.log('onAudioUpload:', { filePath, contentType });
     console.log(`Content Type: ${contentType}`);
 
-    const tempFilePath = await downloadAudioFromStorage(filePath);
+    const { tempFilePath, timeCreated } =
+      await downloadAudioFromStorage(filePath);
     console.log(`Temporary file path: ${tempFilePath}`);
+    console.log(`File created at: ${timeCreated}`);
     try {
       const apiAudioFile = await ai.files.upload({
         file: tempFilePath,
@@ -53,14 +60,14 @@ export const onAudioUpload = onObjectFinalized(
       );
       if (apiAudioFile.uri) {
         const response = await ai.models.generateContent({
-          model: 'gemini-2.0-flash', //音声は100万トークンあたり0.70ドル
+          model: 'gemini-1.5-flash', //音声は100万トークンあたり0.70ドル
           contents: createUserContent([
             createPartFromUri(apiAudioFile.uri, contentType),
             'Generate a transcript of the speech.',
           ]),
           config: {
             systemInstruction:
-              '会議の音声です。結果は日本語で生成してください。',
+              'エンジニアの会議の音声です。結果は日本語で生成してください。',
           },
         });
         if (response.usageMetadata) {
@@ -81,7 +88,7 @@ export const onAudioUpload = onObjectFinalized(
           const docRef = await db.collection('transcripts').add({
             audioUrl: firebaseAudioUrl,
             text: response.text,
-            createdAt,
+            timeCreated,
             uploadedBy: 'system',
             totalTokens,
           });
