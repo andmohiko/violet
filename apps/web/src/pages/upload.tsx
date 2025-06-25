@@ -33,7 +33,7 @@ const UploadPage = () => {
       <h1>音声ファイルアップロード</h1>
       <input
         type="file"
-        accept=".mp3,.wav,audio/*"
+        accept="audio/*"
         onChange={handleFileChange}
         className={styles.fileInput}
       />
