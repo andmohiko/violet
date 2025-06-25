@@ -47,10 +47,13 @@ export const onAudioUpload = onObjectFinalized(
         file: tempFilePath,
         config: { mimeType: contentType },
       });
-      console.log('File uploaded to Gemini API:', apiAudioFile.uri);
+      console.log(
+        'ファイルがFileAPIにアップロードされました:',
+        apiAudioFile.uri,
+      );
       if (apiAudioFile.uri) {
         const response = await ai.models.generateContent({
-          model: 'Gemini 1.5 Flash-8B', //100万トークンあたり0.0375ドル
+          model: 'gemini-2.0-flash', //音声は100万トークンあたり0.70ドル
           contents: createUserContent([
             createPartFromUri(apiAudioFile.uri, contentType),
             'Generate a transcript of the speech.',
@@ -58,31 +61,34 @@ export const onAudioUpload = onObjectFinalized(
           config: {
             systemInstruction:
               '会議の音声です。結果は日本語で生成してください。',
-            thinkingConfig: {
-              thinkingBudget: 0, //thinkingをオフ
-            },
           },
         });
-        //トークン数を表示
         if (response.usageMetadata) {
           console.log('Gemini API usage:', response.usageMetadata);
           // 例: promptTokenCount, candidatesTokenCount など
+          const promptTokens = response.usageMetadata.promptTokenCount ?? 0;
+          const responseTokens =
+            response.usageMetadata.candidatesTokenCount ?? 0;
+          const totalTokens = promptTokens + responseTokens;
+          // トークン数をログに出力
           console.log(
-            `Prompt tokens: ${response.usageMetadata.promptTokenCount}, ` +
-              `Response tokens: ${response.usageMetadata.candidatesTokenCount}`,
+            `Prompt tokens: ${promptTokens}, ` +
+              `Response tokens: ${responseTokens}, ` +
+              `Total tokens: ${totalTokens}`,
           );
+
+          // データベースに保存
+          const docRef = await db.collection('transcripts').add({
+            audioUrl: firebaseAudioUrl,
+            text: response.text,
+            createdAt,
+            uploadedBy: 'system',
+            totalTokens,
+          });
+
+          await docRef.update({ id: docRef.id });
+          console.log('Transcript saved to Firestore.');
         }
-
-        // データベースに保存
-        const docRef = await db.collection('transcripts').add({
-          audioUrl: firebaseAudioUrl,
-          text: response.text,
-          createdAt,
-          uploadedBy: 'system',
-        });
-
-        await docRef.update({ id: docRef.id });
-        console.log('Transcript saved to Firestore.');
       }
     } catch (error) {
       // 通信エラーやAPIエラー時
