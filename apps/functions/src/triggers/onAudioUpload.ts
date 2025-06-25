@@ -1,9 +1,8 @@
 import { onObjectFinalized } from 'firebase-functions/v2/storage';
-import { db, serverTimestamp } from '../lib/firebase';
+import { db, serverTimestamp } from '~/lib/firebase';
 export const onAudioUpload = onObjectFinalized(
   {
-    //bucket: , // デフォルトバケットなら不要
-    region: 'US-CENTRAL1', // 任意のリージョン
+    bucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   },
   async (event) => {
     const filePath = event.data.name;
