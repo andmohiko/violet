@@ -50,7 +50,7 @@ export const onAudioUpload = onObjectFinalized(
       console.log('File uploaded to Gemini API:', apiAudioFile.uri);
       if (apiAudioFile.uri) {
         const response = await ai.models.generateContent({
-          model: 'gemini-2.5-flash',
+          model: 'Gemini 1.5 Flash-8B', //100万トークンあたり0.0375ドル
           contents: createUserContent([
             createPartFromUri(apiAudioFile.uri, contentType),
             'Generate a transcript of the speech.',
@@ -59,10 +59,20 @@ export const onAudioUpload = onObjectFinalized(
             systemInstruction:
               '会議の音声です。結果は日本語で生成してください。',
             thinkingConfig: {
-              thinkingBudget: 0,
+              thinkingBudget: 0, //thinkingをオフ
             },
           },
         });
+        //トークン数を表示
+        if (response.usageMetadata) {
+          console.log('Gemini API usage:', response.usageMetadata);
+          // 例: promptTokenCount, candidatesTokenCount など
+          console.log(
+            `Prompt tokens: ${response.usageMetadata.promptTokenCount}, ` +
+              `Response tokens: ${response.usageMetadata.candidatesTokenCount}`,
+          );
+        }
+
         // データベースに保存
         const docRef = await db.collection('transcripts').add({
           audioUrl: firebaseAudioUrl,
