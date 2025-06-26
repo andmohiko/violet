@@ -11,6 +11,11 @@ import {
   createPartFromUri,
 } from '@google/genai';
 
+type DownloadAudioResult = {
+  tempFilePath: string;
+  timeCreated?: string;
+};
+
 const bucketName = process.env.STORAGE_BUCKET;
 const ai = new GoogleGenAI({
   apiKey: process.env.DEV_GEMINI_API_KEY,
@@ -19,9 +24,10 @@ const ai = new GoogleGenAI({
 //firestoreage上の音声データを一時ファイルとしてダウンロードし、storage上に保存された日時を読み取る関数
 export async function downloadAudioFromStorage(
   filePath: string,
-): Promise<{ tempFilePath: string; timeCreated: string | undefined }> {
+): Promise<DownloadAudioResult> {
   const bucket = getStorage().bucket(bucketName);
   const [metadata] = await bucket.file(filePath).getMetadata();
+
   // メタデータから作成日時を取得
   let timeCreated: string | undefined = undefined;
   if (metadata.timeCreated) {
@@ -42,7 +48,6 @@ export const onAudioUpload = onObjectFinalized(
   async function main(event) {
     const filePath = event.data.name;
     const contentType = event.data.contentType ?? 'application/octet-stream';
-    const firebaseAudioUrl = `gs://${event.data.bucket}/${filePath}`;
     console.log('onAudioUpload:', { filePath, contentType });
     console.log(`Content Type: ${contentType}`);
 
@@ -87,7 +92,7 @@ export const onAudioUpload = onObjectFinalized(
 
           // データベースに保存
           const docRef = await db.collection('transcripts').add({
-            audioUrl: firebaseAudioUrl,
+            storagePath: filePath,
             text: response.text,
             timeCreated, // Firestrageに保存された際の作成日時(文字列型)
             uploadedBy: 'system',
