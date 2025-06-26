@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { useStorage } from '~/providers/StorageProvider';
-import styles from '~/styles/upload.module.css';
+import { Label } from '~/components/ui/label';
+import { Badge } from '~/components/ui/badge';
+import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
+import { Input } from '~/components/ui/input';
+import { Skeleton } from '~/components/ui/skeleton';
+import { Button } from '~/components/ui/button';
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -29,34 +34,56 @@ const UploadPage = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h1>音声ファイルアップロード</h1>
-      <input
-        type="file"
-        accept="audio/*"
-        onChange={handleFileChange}
-        className={styles.fileInput}
-      />
-      {file && (
-        <div className={styles.fileInfo}>
-          <p>選択されたファイル: {file.name}</p>
-          <audio
-            controls
-            src={URL.createObjectURL(file)}
-            className={styles.audioPlayer}
-          />
-          <button onClick={handleUpload} disabled={uploading}>
-            {uploading ? 'アップロード中...' : 'アップロード'}
-          </button>
-          {uploadedUrl && (
+    <div>
+      <Card>
+        <CardHeader>
+          <CardTitle>音声ファイルアップロード</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <div>
+            <Input
+              id="audio-file"
+              type="file"
+              accept="audio/*"
+              onChange={handleFileChange}
+              className="mt-1"
+            />
+          </div>
+
+          {file && (
             <div>
-              <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
-                アップロード後のファイルを確認
-              </a>
+              <div>
+                <span>{file.name}</span>
+                <Badge variant="secondary">
+                  {(file.size / 1024 / 1024).toFixed(1)}MB
+                </Badge>
+              </div>
+              <audio controls src={URL.createObjectURL(file)} />
             </div>
           )}
-        </div>
-      )}
+
+          {file && (
+            <Button
+              onClick={handleUpload}
+              disabled={uploading}
+              variant="default"
+            >
+              {uploading ? 'アップロード中...' : 'アップロード'}
+            </Button>
+          )}
+
+          {uploadedUrl && (
+            <Button asChild variant={'link'}>
+              <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
+                アップロードされた音声ファイルを開く
+              </a>
+            </Button>
+          )}
+
+          {uploading && <Skeleton className="h-10 w-full" />}
+        </CardContent>
+      </Card>
     </div>
   );
 };
