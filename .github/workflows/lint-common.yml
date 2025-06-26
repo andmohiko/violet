@@ -16,7 +16,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8.9.2
+          version: 10.12.2
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -30,7 +30,7 @@ jobs:
 
       - name: tsc
         run: pnpm common lint:tsc
-      
+
       - name: biome
         run: pnpm web lint:biome
 
