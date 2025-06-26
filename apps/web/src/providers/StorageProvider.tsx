@@ -1,3 +1,4 @@
+'use client';
 import React, { createContext, useContext } from 'react';
 import { storage } from '~/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
