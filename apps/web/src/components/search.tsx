@@ -37,6 +37,7 @@ const Search: React.FC<Props> = ({ transcripts, onResult }) => {
           const d = new Date(t.createdAt);
           targetDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         }
+        console.log(t.text, t.createdAt);
         return targetDate === date;
       });
     }

@@ -1,16 +1,17 @@
-import type { ReactElement, ReactNode } from 'react'
+'use client';
+import type { ReactElement, ReactNode } from 'react';
 
-import styles from './style.module.css'
+import styles from './style.module.css';
 
-import { LoadingOverlay } from '~/components/Base/Loading'
-import { useLoadingContext } from '~/providers/LoadingProvider'
+import { LoadingOverlay } from '~/components/Base/Loading';
+import { useLoadingContext } from '~/providers/LoadingProvider';
 
 type Props = {
-  children?: ReactNode
-}
+  children?: ReactNode;
+};
 
 export const SimpleLayout = ({ children }: Props): ReactElement => {
-  const { isLoading } = useLoadingContext()
+  const { isLoading } = useLoadingContext();
 
   return (
     <div className={styles.base}>
@@ -19,5 +20,5 @@ export const SimpleLayout = ({ children }: Props): ReactElement => {
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
