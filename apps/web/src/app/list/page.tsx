@@ -76,7 +76,7 @@ const ListPage = () => {
       <Search transcripts={transcripts} onResult={handleSearch} />
       <ul>
         {(searched ? filtered : transcripts).length === 0 ? (
-          <p>該当するデータがありません。</p>
+          <p>該当するデータがありません</p>
         ) : (
           (searched ? filtered : transcripts).map((t) => (
             <li key={t.id}>
