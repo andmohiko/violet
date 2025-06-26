@@ -4,6 +4,7 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 import { getStorage } from 'firebase-admin/storage';
 import * as fs from 'node:fs/promises';
+import { serverTimestamp } from '~/lib/firebase';
 import {
   GoogleGenAI,
   createUserContent,
@@ -88,8 +89,9 @@ export const onAudioUpload = onObjectFinalized(
           const docRef = await db.collection('transcripts').add({
             audioUrl: firebaseAudioUrl,
             text: response.text,
-            timeCreated,
+            timeCreated, // Firestrageに保存された際の作成日時(文字列型)
             uploadedBy: 'system',
+            createdAt: serverTimestamp, //timestamp型での時刻保存
             totalTokens,
           });
 
