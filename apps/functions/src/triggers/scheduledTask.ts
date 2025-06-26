@@ -1,5 +1,6 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { summarizeYesterdayTranscripts } from './summarize';
+import { notifySlack } from './notifySlack';
 
 export const dailySummary = onSchedule(
   {
@@ -11,7 +12,7 @@ export const dailySummary = onSchedule(
     const summary = await summarizeYesterdayTranscripts();
     if (summary) {
       console.log('要約結果:', summary);
-      // ここでSlack通知なども追加可能
+      await notifySlack(summary);
     }
     console.log('毎日00:00に実行される関数です');
   },
