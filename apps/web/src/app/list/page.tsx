@@ -68,7 +68,7 @@ const ListPage = () => {
 
   useEffect(() => {
     setFiltered(transcripts);
-  }, [transcripts]);
+  }, [transcripts, getAudioDownloadUrl]);
 
   return (
     <div>
@@ -80,7 +80,10 @@ const ListPage = () => {
         ) : (
           (searched ? filtered : transcripts).map((t) => (
             <li key={t.id}>
-              <button onClick={() => setOpenId(openId === t.id ? null : t.id)}>
+              <button
+                type="button"
+                onClick={() => setOpenId(openId === t.id ? null : t.id)}
+              >
                 {formatDate(t.createdAt)}
               </button>
               {openId === t.id && (

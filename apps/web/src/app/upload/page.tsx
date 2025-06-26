@@ -60,7 +60,9 @@ const UploadPage = () => {
                   {(file.size / 1024 / 1024).toFixed(1)}MB
                 </Badge>
               </div>
-              <audio controls src={URL.createObjectURL(file)} />
+              <audio controls src={URL.createObjectURL(file)}>
+                <track kind="captions" />
+              </audio>
             </div>
           )}
 
