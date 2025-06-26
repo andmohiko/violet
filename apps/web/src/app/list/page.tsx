@@ -67,8 +67,8 @@ const ListPage = () => {
   }, [transcripts]);
 
   useEffect(() => {
-    setFiltered(transcripts);
-  }, [transcripts, getAudioDownloadUrl]);
+    if (!searched) setFiltered(transcripts);
+  }, [transcripts, searched]);
 
   return (
     <div>

@@ -1,6 +1,7 @@
 {
   "projects": {
     "default": "",
-    "test": "transcription-f3e8a"
+    "test": "transcription-f3e8a",
+    "dev": "dev-violet"
   }
 }
