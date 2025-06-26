@@ -31,13 +31,30 @@ const Search: React.FC<Props> = ({ transcripts, onResult }) => {
     if (date) {
       results = results.filter((t) => {
         if (!t.createdAt) return false;
-        const d =
-          typeof t.createdAt === 'string'
-            ? t.createdAt
-            : t.createdAt.toDate
-              ? t.createdAt.toDate().toISOString()
-              : new Date(t.createdAt).toISOString();
-        return d.startsWith(date);
+        let targetDate: string;
+        if (t.createdAt.toDate) {
+          // Firestore Timestamp型
+          const d = t.createdAt.toDate();
+          targetDate =
+            d.getFullYear() +
+            '-' +
+            String(d.getMonth() + 1).padStart(2, '0') +
+            '-' +
+            String(d.getDate()).padStart(2, '0');
+        } else if (typeof t.createdAt === 'string') {
+          // 文字列型
+          targetDate = t.createdAt.slice(0, 10);
+        } else {
+          // その他
+          const d = new Date(t.createdAt);
+          targetDate =
+            d.getFullYear() +
+            '-' +
+            String(d.getMonth() + 1).padStart(2, '0') +
+            '-' +
+            String(d.getDate()).padStart(2, '0');
+        }
+        return targetDate === date;
       });
     }
 

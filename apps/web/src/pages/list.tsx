@@ -6,7 +6,7 @@ type Transcript = {
   id: string;
   audioUrl: string;
   text: string;
-  timeCreated?: any;
+  createdAt?: any;
   uploadedBy?: string;
 };
 
@@ -61,7 +61,7 @@ const ListPage = () => {
           (searched ? filtered : transcripts).map((t) => (
             <li key={t.id}>
               <button onClick={() => setOpenId(openId === t.id ? null : t.id)}>
-                {t.timeCreated}
+                {formatDate(t.createdAt)}
               </button>
               {openId === t.id && (
                 <div style={{ marginTop: 8, marginBottom: 8 }}>
