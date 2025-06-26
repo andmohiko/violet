@@ -92,7 +92,7 @@ export const onAudioUpload = onObjectFinalized(
             timeCreated, // Firestrageに保存された際の作成日時(文字列型)
             uploadedBy: 'system',
             createdAt: serverTimestamp, //timestamp型での時刻保存
-            totalTokens,
+            transcriptTotalTokens: totalTokens, // 書き起こしのトークン数
           });
 
           await docRef.update({ id: docRef.id });
