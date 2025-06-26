@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions/v1';
 import { onAudioUpload } from './triggers/onAudioUpload';
+import { dailySummary } from './triggers/scheduledTask';
 import router from './router';
 
 const cors = require('cors')({ origin: true });
@@ -14,6 +15,7 @@ app.use(router);
 
 // triggers
 exports.onAudioUpload = onAudioUpload;
+exports.dailySummary = dailySummary;
 
 // API
 exports.api = functions
