@@ -45,7 +45,7 @@ export async function summarizeYesterdayTranscripts() {
   let count = 1;
   for (const doc of snapshot.docs) {
     const text = doc.data().text;
-    const transcriptTotalTokens = doc.data().totalTokens ?? 0;
+    const transcriptTotalTokens = doc.data().transcriptTotalTokens ?? 0;
     if (!text) continue;
 
     const response = await ai.models.generateContent({
@@ -65,10 +65,6 @@ export async function summarizeYesterdayTranscripts() {
           'エンジニアの会議の要約です。日本語で簡潔にまとめてください。',
       },
     });
-
-    const summary = response.text ?? '';
-    await db.collection('transcripts').doc(doc.id).update({ summary });
-
     // トークン数のログ出力
     let summariesTotalTokens = 0;
     if (response.usageMetadata) {
@@ -82,6 +78,13 @@ export async function summarizeYesterdayTranscripts() {
       );
     }
     const totalTokens = summariesTotalTokens + transcriptTotalTokens;
+    const summary = response.text ?? '';
+    await db.collection('transcripts').doc(doc.id).update({
+      summary,
+      summaryTotalTokens: summariesTotalTokens, // 要約生成時のトークン数
+      totalTokens, // 書き起こし＋要約の合計トークン数
+    });
+
     summaries.push(
       `書き起こし${count}\nFireStoreドキュメントID${doc.id}\n消費トークン総数${totalTokens}\n${summary}\n`,
     );
