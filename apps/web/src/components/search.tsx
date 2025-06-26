@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-
-type Transcript = {
-  id: string;
-  audioUrl: string;
-  text: string;
-  createdAt?: any;
-  uploadedBy?: string;
-};
+import type { Transcript } from '~/types/transcripts';
 
 type Props = {
   transcripts: Transcript[];

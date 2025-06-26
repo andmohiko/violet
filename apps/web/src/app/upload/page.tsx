@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from 'react';
 import { useStorage } from '~/providers/StorageProvider';
 import { Label } from '~/components/ui/label';
