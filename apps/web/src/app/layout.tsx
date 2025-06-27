@@ -1,12 +1,8 @@
+import { ModeToggle } from '~/components/modeToggle';
 import { Providers } from '~/providers';
 import '~/styles/globals.css';
 import '~/styles/reset.css';
 import '~/styles/variables.css';
-
-export const metadata = {
-  title: 'Firebase Monorepo',
-  description: 'Firebase Monorepo',
-};
 
 export default function RootLayout({
   children,
@@ -14,10 +10,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
       <head />
       <body id="root">
-        <Providers>{children}</Providers>
+        <Providers>
+          <ModeToggle />
+          {children}
+        </Providers>
       </body>
     </html>
   );

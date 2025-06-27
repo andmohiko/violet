@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { useStorage } from '~/providers/StorageProvider';
-import { Label } from '~/components/ui/label';
 import { Badge } from '~/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';
@@ -35,58 +34,47 @@ const UploadPage = () => {
   };
 
   return (
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle>音声ファイルアップロード</CardTitle>
-        </CardHeader>
+    <div className="bg-background text-foreground min-h-screen">
+      <div>音声ファイルアップロード</div>
 
-        <CardContent>
+      <div>
+        <Input
+          id="audio-file"
+          type="file"
+          accept="audio/*"
+          onChange={handleFileChange}
+        />
+      </div>
+
+      {file && (
+        <div>
           <div>
-            <Input
-              id="audio-file"
-              type="file"
-              accept="audio/*"
-              onChange={handleFileChange}
-              className="mt-1"
-            />
+            <span>{file.name}</span>
+            <Badge variant="secondary">
+              {(file.size / 1024 / 1024).toFixed(1)}MB
+            </Badge>
           </div>
+          <audio controls src={URL.createObjectURL(file)}>
+            <track kind="captions" />
+          </audio>
+        </div>
+      )}
 
-          {file && (
-            <div>
-              <div>
-                <span>{file.name}</span>
-                <Badge variant="secondary">
-                  {(file.size / 1024 / 1024).toFixed(1)}MB
-                </Badge>
-              </div>
-              <audio controls src={URL.createObjectURL(file)}>
-                <track kind="captions" />
-              </audio>
-            </div>
-          )}
+      {file && (
+        <Button onClick={handleUpload} disabled={uploading} variant="default">
+          {uploading ? 'アップロード中...' : 'アップロード'}
+        </Button>
+      )}
 
-          {file && (
-            <Button
-              onClick={handleUpload}
-              disabled={uploading}
-              variant="default"
-            >
-              {uploading ? 'アップロード中...' : 'アップロード'}
-            </Button>
-          )}
+      {uploadedUrl && (
+        <Button asChild variant={'link'}>
+          <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
+            アップロードされた音声ファイルを開く
+          </a>
+        </Button>
+      )}
 
-          {uploadedUrl && (
-            <Button asChild variant={'link'}>
-              <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
-                アップロードされた音声ファイルを開く
-              </a>
-            </Button>
-          )}
-
-          {uploading && <Skeleton className="h-10 w-full" />}
-        </CardContent>
-      </Card>
+      {uploading && <Skeleton className="h-10 w-full" />}
     </div>
   );
 };
