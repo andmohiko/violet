@@ -15,7 +15,8 @@
     "predeploy",
     "recaptcha",
     "vercel",
-    "webp"
+    "webp",
+    "svgs"
   ],
   "ignorePaths": [
     "node_modules",
