@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useFirestore } from '~/providers/DbProvider';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/lib/firebase';
@@ -15,10 +15,10 @@ const ListPage = () => {
   const [audioUrls, setAudioUrls] = useState<{ [id: string]: string }>({});
   const [searched, setSearched] = useState(false);
 
-  const getAudioDownloadUrl = async (path: string) => {
+  const getAudioDownloadUrl = useCallback(async (path: string) => {
     const fileRef = ref(storage, path);
     return await getDownloadURL(fileRef);
-  };
+  }, []);
 
   const handleSearch = (results: Transcript[]) => {
     setFiltered(results);
@@ -26,14 +26,11 @@ const ListPage = () => {
     setOpenId(null);
   };
 
-  const formatDate = (date: any) => {
+  const formatDate = (date?: { toDate: () => Date }) => {
     if (!date) return '-';
-    // Firestore Timestamp型の場合
-    if (date.toDate) return date.toDate().toLocaleString();
-    // ISO文字列や数値の場合
-    return new Date(date).toLocaleString();
+    // Timestamp型をDate型に変換し、日本時間で表示
+    return date.toDate().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
   };
-
   useEffect(() => {
     const fetchTranscripts = async () => {
       setLoading(true);
@@ -64,7 +61,7 @@ const ListPage = () => {
       setAudioUrls(urls);
     };
     fetchUrls();
-  }, [transcripts]);
+  }, [transcripts, getAudioDownloadUrl]);
 
   useEffect(() => {
     if (!searched) setFiltered(transcripts);

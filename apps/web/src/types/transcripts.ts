@@ -1,7 +1,9 @@
+import type { Timestamp } from 'firebase/firestore';
+
 export type Transcript = {
   id: string;
   storagePath?: string;
   text: string;
-  createdAt?: any;
+  createdAt?: Timestamp | undefined;
   uploadedBy?: string;
 };

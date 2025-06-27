@@ -1,11 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useStorage } from '~/providers/StorageProvider';
 import { Badge } from '~/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';
 import { Skeleton } from '~/components/ui/skeleton';
 import { Button } from '~/components/ui/button';
+import { Separator } from '~/components/ui/separator';
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -14,7 +15,7 @@ const UploadPage = () => {
   const { uploadFile } = useStorage();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0]) {
       setFile(e.target.files[0]);
     }
   };
@@ -34,49 +35,69 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      <div>音声ファイルアップロード</div>
-
-      <div>
-        <Input
-          id="audio-file"
-          type="file"
-          accept="audio/*"
-          onChange={handleFileChange}
-        />
-      </div>
-
-      {file && (
-        <div>
+    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold mb-2">
+            音声ファイルアップロード（mp3, wavなど）
+          </CardTitle>
+        </CardHeader>
+        <Separator />
+        <CardContent className="space-y-6">
           <div>
-            <span>{file.name}</span>
-            <Badge variant="secondary">
-              {(file.size / 1024 / 1024).toFixed(1)}MB
-            </Badge>
+            <Input
+              id="audio-file"
+              type="file"
+              accept="audio/*"
+              onChange={handleFileChange}
+              disabled={uploading}
+            />
           </div>
-          <audio controls src={URL.createObjectURL(file)}>
-            <track kind="captions" />
-          </audio>
-        </div>
-      )}
 
-      {file && (
-        <Button onClick={handleUpload} disabled={uploading} variant="default">
-          {uploading ? 'アップロード中...' : 'アップロード'}
-        </Button>
-      )}
+          {file && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="font-medium truncate">{file.name}</span>
+                <Badge variant="secondary">
+                  {(file.size / 1024 / 1024).toFixed(1)}MB
+                </Badge>
+              </div>
+              <audio
+                controls
+                src={URL.createObjectURL(file)}
+                className="w-full rounded"
+              >
+                <track kind="captions" />
+              </audio>
+              <Button
+                onClick={handleUpload}
+                disabled={uploading}
+                variant="default"
+                className="w-full"
+              >
+                {uploading ? 'アップロード中...' : 'アップロード'}
+              </Button>
+            </div>
+          )}
 
-      {uploadedUrl && (
-        <Button asChild variant={'link'}>
-          <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
-            アップロードされた音声ファイルを開く
-          </a>
-        </Button>
-      )}
+          {uploading && <Skeleton className="h-10 w-full" />}
 
-      {uploading && <Skeleton className="h-10 w-full" />}
+          {uploadedUrl && (
+            <div className="space-y-2 text-center">
+              <Separator />
+              <p className="text-green-600 font-semibold">
+                アップロードが完了しました！
+              </p>
+              <Button asChild variant="link" className="w-full text-center">
+                <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
+                  アップロードされた音声ファイルを開く
+                </a>
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
-
 export default UploadPage;
