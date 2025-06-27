@@ -9,13 +9,13 @@ export const Header = () => (
       </span>
     </div>
     <div className="flex items-center gap-4">
-      <Button asChild variant="default" className="w-48">
+      <Button asChild variant="black" className="w-48">
         <a href="/">ホーム</a>
       </Button>
-      <Button asChild variant="default" className="w-48">
+      <Button asChild variant="black" className="w-48">
         <a href="/upload">アップロード</a>
       </Button>
-      <Button asChild variant="default" className="w-48">
+      <Button asChild variant="black" className="w-48">
         <a href="/list">一覧</a>
       </Button>
 
