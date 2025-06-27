@@ -26,10 +26,21 @@ const ListPage = () => {
     setOpenId(null);
   };
 
-  const formatDate = (date?: { toDate: () => Date }) => {
+  const formatDate = (date?: { toDate?: () => Date } | Date | string) => {
     if (!date) return '-';
-    // Timestamp型をDate型に変換し、日本時間で表示
-    return date.toDate().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    if (
+      typeof date === 'object' &&
+      date !== null &&
+      'toDate' in date &&
+      typeof date.toDate === 'function'
+    ) {
+      // Timestamp型
+      return date.toDate().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    }
+    if (date instanceof Date) {
+      // Date型
+      return date.toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+    }
   };
   useEffect(() => {
     const fetchTranscripts = async () => {

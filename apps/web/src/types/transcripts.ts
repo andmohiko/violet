@@ -4,6 +4,6 @@ export type Transcript = {
   id: string;
   storagePath?: string;
   text: string;
-  createdAt?: Timestamp | undefined;
+  createdAt?: Timestamp | Date | string | undefined;
   uploadedBy?: string;
 };
