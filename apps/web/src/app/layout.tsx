@@ -3,6 +3,7 @@ import { Providers } from '~/providers';
 import '~/styles/globals.css';
 import '~/styles/reset.css';
 import '~/styles/variables.css';
+import { Header } from '~/components/Header';
 
 export default function RootLayout({
   children,
@@ -14,7 +15,7 @@ export default function RootLayout({
       <head />
       <body id="root">
         <Providers>
-          <ModeToggle />
+          <Header />
           {children}
         </Providers>
       </body>
