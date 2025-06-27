@@ -24,18 +24,25 @@ const Search: React.FC<Props> = ({ transcripts, onResult }) => {
     if (date) {
       results = results.filter((t) => {
         if (!t.createdAt) return false;
-        // Timestamp型をDate型に変換
-        const d = t.createdAt.toDate();
-        // 日付を文字列に変換(タイムゾーンを設定)
-        const targetDate = d
-          .toLocaleDateString('ja-JP', {
-            timeZone: 'Asia/Tokyo',
-          })
-          .replaceAll('/', '-'); // "yyyy/mm/dd" → "yyyy-mm-dd"にして比較
+        let d: Date;
+        // Timestamp型（toDateがある）ならDate型に変換
+        if (
+          typeof t.createdAt === 'object' &&
+          t.createdAt !== null &&
+          typeof (t.createdAt as { toDate?: unknown }).toDate === 'function'
+        ) {
+          d = (t.createdAt as { toDate: () => Date }).toDate();
+        } else {
+          d = new Date(t.createdAt as string | Date);
+        }
+        // 日付をyyyy-mm-dd形式に変換
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        const targetDate = `${yyyy}-${mm}-${dd}`;
         return targetDate === date;
       });
     }
-
     onResult(results);
   };
 
