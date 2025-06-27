@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { Transcript } from '~/types/transcripts';
 
 type Props = {
@@ -24,20 +24,14 @@ const Search: React.FC<Props> = ({ transcripts, onResult }) => {
     if (date) {
       results = results.filter((t) => {
         if (!t.createdAt) return false;
-        let targetDate: string;
-        if (t.createdAt.toDate) {
-          // Firestore Timestamp型
-          const d = t.createdAt.toDate();
-          targetDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        } else if (typeof t.createdAt === 'string') {
-          // 文字列型
-          targetDate = t.createdAt.slice(0, 10);
-        } else {
-          // その他
-          const d = new Date(t.createdAt);
-          targetDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        }
-        console.log(t.text, t.createdAt);
+        // Timestamp型をDate型に変換
+        const d = t.createdAt.toDate();
+        // 日付を文字列に変換(タイムゾーンを設定)
+        const targetDate = d
+          .toLocaleDateString('ja-JP', {
+            timeZone: 'Asia/Tokyo',
+          })
+          .replaceAll('/', '-'); // "yyyy/mm/dd" → "yyyy-mm-dd"にして比較
         return targetDate === date;
       });
     }

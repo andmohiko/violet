@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useContext } from 'react';
+import { createContext, useContext } from 'react';
 import { db } from '~/lib/firebase';
 import {
   collection,
@@ -8,12 +8,11 @@ import {
   getDocs,
   doc,
   setDoc,
-  DocumentData,
-  QueryDocumentSnapshot,
 } from 'firebase/firestore';
+import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 
 type FirestoreContextType = {
-  addDocument: (col: string, data: Record<string, any>) => Promise<string>;
+  addDocument: (col: string, data: Record<string, unknown>) => Promise<string>;
   getDocument: (col: string, id: string) => Promise<DocumentData | undefined>;
   getAllDocuments: (
     col: string,
@@ -21,7 +20,7 @@ type FirestoreContextType = {
   setDocument: (
     col: string,
     id: string,
-    data: Record<string, any>,
+    data: Record<string, unknown>,
   ) => Promise<void>;
 };
 
@@ -33,7 +32,7 @@ export const DbProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   // ドキュメント追加
-  const addDocument = async (col: string, data: Record<string, any>) => {
+  const addDocument = async (col: string, data: Record<string, unknown>) => {
     const docRef = await addDoc(collection(db, col), data);
     return docRef.id;
   };
@@ -54,7 +53,7 @@ export const DbProvider: React.FC<{ children: React.ReactNode }> = ({
   const setDocument = async (
     col: string,
     id: string,
-    data: Record<string, any>,
+    data: Record<string, unknown>,
   ) => {
     await setDoc(doc(db, col, id), data);
   };
