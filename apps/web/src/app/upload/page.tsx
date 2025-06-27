@@ -72,7 +72,7 @@ const UploadPage = () => {
               <Button
                 onClick={handleUpload}
                 disabled={uploading}
-                variant="default"
+                variant="black"
                 className="w-full"
               >
                 {uploading ? 'アップロード中...' : 'アップロード'}
