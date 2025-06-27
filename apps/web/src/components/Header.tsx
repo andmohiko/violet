@@ -1,25 +1,36 @@
-import { ModeToggle } from '~/components/modeToggle';
+'use client';
 import { Button } from '~/components/ui/button';
+import { useRouter } from 'next/navigation';
 
-export const Header = () => (
-  <header>
-    <div className="flex items-center gap-4">
-      <span className="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100 drop-shadow select-none">
-        Transcription App
-      </span>
-    </div>
-    <div className="flex items-center gap-4">
-      <Button asChild variant="black" className="w-48">
-        <a href="/">ホーム</a>
-      </Button>
-      <Button asChild variant="black" className="w-48">
-        <a href="/upload">アップロード</a>
-      </Button>
-      <Button asChild variant="black" className="w-48">
-        <a href="/list">一覧</a>
-      </Button>
+export const Header = () => {
+  const router = useRouter();
 
-      <ModeToggle />
+  return (
+    <div>
+      <div className="flex items-center gap-4">
+        <div>Transcription App</div>
+        <Button
+          variant="black"
+          className="w-40"
+          onClick={() => router.push('/')}
+        >
+          ホーム
+        </Button>
+        <Button
+          variant="black"
+          className="w-40"
+          onClick={() => router.push('/upload')}
+        >
+          アップロード
+        </Button>
+        <Button
+          variant="black"
+          className="w-40"
+          onClick={() => router.push('/list')}
+        >
+          一覧
+        </Button>
+      </div>
     </div>
-  </header>
-);
+  );
+};
