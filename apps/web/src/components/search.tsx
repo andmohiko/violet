@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import type { Transcript } from '~/types/transcripts';
+import { Calendar } from '~/components/ui/calendar';
+import { Input } from '~/components/ui/input';
+import { Button } from '~/components/ui/button';
 
 type Props = {
   transcripts: Transcript[];
@@ -8,7 +11,7 @@ type Props = {
 
 const Search: React.FC<Props> = ({ transcripts, onResult }) => {
   const [keyword, setKeyword] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
   const handleSearch = () => {
     let results = transcripts;
@@ -22,6 +25,11 @@ const Search: React.FC<Props> = ({ transcripts, onResult }) => {
 
     // 日付で検索（yyyy-mm-dd形式で部分一致）
     if (date) {
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      const selectedDate = `${yyyy}-${mm}-${dd}`;
+
       results = results.filter((t) => {
         if (!t.createdAt) return false;
         let d: Date;
@@ -40,30 +48,31 @@ const Search: React.FC<Props> = ({ transcripts, onResult }) => {
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const dd = String(d.getDate()).padStart(2, '0');
         const targetDate = `${yyyy}-${mm}-${dd}`;
-        return targetDate === date;
+        return targetDate === selectedDate;
       });
     }
     onResult(results);
   };
 
   return (
-    <div style={{ marginBottom: 16 }}>
-      <input
-        type="text"
-        placeholder="文字起こし検索"
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-        style={{ marginRight: 8 }}
-      />
-      <input
-        type="date"
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        style={{ marginRight: 8 }}
-      />
-      <button type="button" onClick={handleSearch}>
-        検索
-      </button>
+    <div className="">
+      <div className="flex flex-col justify-center items-center gap-4 mb-4">
+        <Input
+          type="text"
+          placeholder="文字列検索"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+
+        <Calendar mode="single" selected={date} onSelect={setDate} />
+        <Button
+          type="button"
+          onClick={handleSearch}
+          className="w-60 h-10 text-lg"
+        >
+          検索
+        </Button>
+      </div>
     </div>
   );
 };
