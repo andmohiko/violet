@@ -1,13 +1,14 @@
 'use client';
 import { Button } from '~/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { ModeToggle } from './modeToggle';
 
 export const Header = () => {
   const router = useRouter();
 
   return (
-    <div className="w-full py-10 bg-primary/10 shadow-md mb-16">
-      <div className="flex items-center justify-between maw-full px-6">
+    <header className="sticky top-0 w-full py-10 bg-secondary shadow-md mb-16 z-10 isolation-auto">
+      <div className="flex items-center justify-between max-w-full px-6">
         <div className="text-5xl font-black tracking-tight flex items-center gap-2">
           <span className="text-primary">TranscriptionApp</span>
         </div>
@@ -38,6 +39,6 @@ export const Header = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </header>
   );
 };

@@ -5,6 +5,7 @@ import '~/styles/globals.css';
 import '~/styles/reset.css';
 import '~/styles/variables.css';
 */
+
 import { Header } from '~/components/Header';
 
 export default function RootLayout({
@@ -16,12 +17,12 @@ export default function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <head />
       <body id="root">
-        <Header />
-        <div className="flex justify-center items-center w-full">
-          <Providers>
+        <Providers>
+          <Header />
+          <div className="flex justify-center items-center w-full">
             <div className="flex flex-col items-center">{children}</div>
-          </Providers>
-        </div>
+          </div>
+        </Providers>
       </body>
     </html>
   );
