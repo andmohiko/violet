@@ -17,7 +17,9 @@
     "vercel",
     "webp",
     "svgs",
-    "publiced"
+    "publiced",
+    "genai",
+    "firestoreage"
   ],
   "ignorePaths": [
     "node_modules",
