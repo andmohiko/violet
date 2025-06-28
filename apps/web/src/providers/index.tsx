@@ -4,6 +4,7 @@ import { StorageProvider } from '~/providers/StorageProvider';
 import { ThemeProvider } from 'next-themes';
 
 import { DbProvider } from '~/providers/DbProvider';
+import { AuthProvider } from './AuthProvider';
 
 type Props = {
   children: React.ReactNode;
@@ -18,9 +19,11 @@ export const Providers = ({ children }: Props): React.ReactNode => {
       disableTransitionOnChange
     >
       <LoadingProvider>
-        <DbProvider>
-          <StorageProvider>{children}</StorageProvider>
-        </DbProvider>
+        <AuthProvider>
+          <DbProvider>
+            <StorageProvider>{children}</StorageProvider>
+          </DbProvider>
+        </AuthProvider>
       </LoadingProvider>
     </ThemeProvider>
   );

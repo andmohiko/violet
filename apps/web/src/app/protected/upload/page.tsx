@@ -7,6 +7,7 @@ import { Input } from '~/components/ui/input';
 import { Skeleton } from '~/components/ui/skeleton';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
+import { useAuthGuard } from '~/hooks/useAuthGuard';
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);

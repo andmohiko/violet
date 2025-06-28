@@ -7,6 +7,7 @@ import type { Transcript } from '~/types/transcripts';
 import Search from '~/components/search';
 import Modal from '~/components/Modal';
 import { Button } from '~/components/ui/button';
+import { useAuthGuard } from '~/hooks/useAuthGuard';
 import {
   Table,
   TableBody,
