@@ -1,6 +1,8 @@
+'use client';
 import { ModeToggle } from '~/components/modeToggle';
 import { Providers } from '~/providers';
 import '~/styles/globals.css';
+import { useAuthGuard } from '~/hooks/useAuthGuard';
 /*
 import '~/styles/reset.css';
 import '~/styles/variables.css';
