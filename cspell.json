@@ -16,7 +16,8 @@
     "recaptcha",
     "vercel",
     "webp",
-    "svgs"
+    "svgs",
+    "publiced"
   ],
   "ignorePaths": [
     "node_modules",
