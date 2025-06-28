@@ -16,5 +16,10 @@ service cloud.firestore {
     function isUser(userId) {
       return request.auth.uid == userId;
     }
+    
+  //ログイン済みのユーザーのみ読み書き可能
+  match /{document=**} {
+      allow read, write: if isSignedIn();
+    }
   }
 }

@@ -73,7 +73,7 @@ export const onAudioUpload = onObjectFinalized(
           ]),
           config: {
             systemInstruction:
-              'エンジニアの会議の音声です。結果は日本語で生成してください。',
+              'エンジニアの音声です。結果は日本語で生成してください。',
           },
         });
         if (response.usageMetadata) {
