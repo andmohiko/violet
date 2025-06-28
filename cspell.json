@@ -19,7 +19,8 @@
     "svgs",
     "publiced",
     "genai",
-    "firestoreage"
+    "firestoreage",
+    "Firestorage"
   ],
   "ignorePaths": [
     "node_modules",
