@@ -94,7 +94,7 @@ export const onAudioUpload = onObjectFinalized(
           const docRef = await db.collection('transcripts').add({
             storagePath: filePath,
             text: response.text,
-            timeCreated, // Firestrageに保存された際の作成日時(文字列型)
+            timeCreated, // Firestorageに保存された際の作成日時(文字列型)
             uploadedBy: 'system',
             createdAt: serverTimestamp, //timestamp型での時刻保存
             transcriptTotalTokens: totalTokens, // 書き起こしのトークン数
