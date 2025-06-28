@@ -62,7 +62,7 @@ export async function summarizeYesterdayTranscripts() {
       ],
       config: {
         systemInstruction:
-          'エンジニアの会議の要約です。日本語で簡潔にまとめてください。',
+          'エンジニアが話した文章の書き起こしです。日本語で簡潔にまとめてください。',
       },
     });
     // トークン数のログ出力
