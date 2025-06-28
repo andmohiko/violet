@@ -42,15 +42,15 @@ const UploadPage = () => {
             音声ファイルアップロード（mp3, wavなど）
           </CardTitle>
         </CardHeader>
-        <Separator />
         <CardContent className="space-y-6">
-          <div>
+          <div className="flex flex-col items-center">
             <Input
               id="audio-file"
               type="file"
               accept="audio/*"
               onChange={handleFileChange}
               disabled={uploading}
+              className="w-80"
             />
           </div>
 
@@ -72,7 +72,7 @@ const UploadPage = () => {
               <Button
                 onClick={handleUpload}
                 disabled={uploading}
-                variant="black"
+                variant="default"
                 className="w-full"
               >
                 {uploading ? 'アップロード中...' : 'アップロード'}
