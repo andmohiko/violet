@@ -35,8 +35,8 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="flex flex-col items-center justify-center p-4">
+      <Card className=" shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold mb-2">
             音声ファイルアップロード（mp3, wavなど）
