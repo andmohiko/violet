@@ -1,4 +1,4 @@
-import { db } from '../lib/firebase';
+import { db } from '../firebase';
 import { GoogleGenAI } from '@google/genai';
 
 const ai = new GoogleGenAI({

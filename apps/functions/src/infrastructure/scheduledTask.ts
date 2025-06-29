@@ -1,6 +1,6 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler';
-import { summarizeYesterdayTranscripts } from './summarize';
-import { notifySlack } from './notifySlack';
+import { summarizeYesterdayTranscripts } from '../lib/gemini/summarize';
+import { notifySlack } from '../lib/Slack/notifySlack';
 
 export const dailySummary = onSchedule(
   {
@@ -8,7 +8,6 @@ export const dailySummary = onSchedule(
     timeZone: 'Asia/Tokyo', // タイムゾーン
   },
   async () => {
-    // ここにバッチ処理を書く
     const summary = await summarizeYesterdayTranscripts();
     if (summary) {
       console.log('要約結果:', summary);
