@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions/v1';
-import { onAudioUpload } from './triggers/onAudioUpload';
-import { dailySummary } from './triggers/scheduledTask';
+import { onAudioUpload } from './infrastructure/firestore/onAudioUpload';
+import { dailySummary } from './infrastructure/scheduledTask';
 import router from './router';
 
 const cors = require('cors')({ origin: true });
