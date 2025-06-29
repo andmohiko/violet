@@ -41,6 +41,7 @@ export const onAudioUpload = onObjectFinalized(
   async function main(event) {
     const filePath = event.data.name;
     const contentType = event.data.contentType ?? 'application/octet-stream';
+    const uploadedBy = event.data.metadata?.uploadedBy ?? 'system';
     console.log('onAudioUpload:', { filePath, contentType });
     console.log(`Content Type: ${contentType}`);
 
@@ -84,7 +85,7 @@ export const onAudioUpload = onObjectFinalized(
           const docRef = await db.collection('transcripts').add({
             storagePath: filePath,
             text: response.text,
-            uploadedBy: 'system',
+            uploadedBy,
             createdAt: serverTimestamp, //timestamp型での時刻保存
             transcriptTotalTokens: totalTokens, // 書き起こしのトークン数
           });
