@@ -7,13 +7,14 @@ import { Input } from '~/components/ui/input';
 import { Skeleton } from '~/components/ui/skeleton';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
-import { useAuthGuard } from '~/hooks/useAuthGuard';
+import { useAuth } from '~/providers/AuthProvider';
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const { uploadFile } = useStorage();
+  const { currentUser } = useAuth();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
@@ -26,7 +27,9 @@ const UploadPage = () => {
     setUploading(true);
     try {
       // "uploads/" フォルダにファイル名で保存
-      const url = await uploadFile(`uploads/${file.name}`, file);
+      const url = await uploadFile(`uploads/${file.name}`, file, {
+        uploadedBy: currentUser?.uid ?? '',
+      });
       setUploadedUrl(url);
       alert('アップロード完了');
     } catch (e) {

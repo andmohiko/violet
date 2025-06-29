@@ -5,7 +5,11 @@ import { storage } from '~/lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 type StorageContextType = {
-  uploadFile: (path: string, file: File) => Promise<string>;
+  uploadFile: (
+    path: string,
+    file: File,
+    customMetadata?: Record<string, string>,
+  ) => Promise<string>;
 };
 
 const StorageContext = createContext<StorageContextType | undefined>(undefined);
@@ -14,9 +18,16 @@ export const StorageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   // ファイルアップロード関数
-  const uploadFile = async (path: string, file: File) => {
+  const uploadFile = async (
+    path: string,
+    file: File,
+    customMetadata?: Record<string, string>,
+  ) => {
     const fileRef = ref(storage, path);
-    await uploadBytes(fileRef, file);
+    const metadata = {
+      customMetadata: customMetadata ?? {}, // userIdをメタデータとして渡す
+    };
+    await uploadBytes(fileRef, file, metadata);
     return getDownloadURL(fileRef);
   };
 
