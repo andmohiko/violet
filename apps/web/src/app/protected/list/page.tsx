@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { useFirestore } from '~/providers/DbProvider';
+import { useFirestore } from '~/infrastructure/firestore/DbProvider';
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/lib/firebase';
 import type { Transcript } from '~/types/transcripts';
