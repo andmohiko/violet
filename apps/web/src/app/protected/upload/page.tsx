@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useStorage } from '~/providers/StorageProvider';
+import { useStorage } from '~/infrastructure/storage/StorageProvider';
 import { Badge } from '~/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardContent } from '~/components/ui/card';
 import { Input } from '~/components/ui/input';

@@ -1,9 +1,9 @@
 import { LoadingProvider } from '~/providers/LoadingProvider';
 import { MantineProvider } from '~/providers/MantineProvider';
-import { StorageProvider } from '~/providers/StorageProvider';
+import { StorageProvider } from '~/infrastructure/storage/StorageProvider';
 import { ThemeProvider } from 'next-themes';
 
-import { DbProvider } from '~/providers/DbProvider';
+import { DbProvider } from '~/infrastructure/firestore/DbProvider';
 import { AuthProvider } from './AuthProvider';
 
 type Props = {
