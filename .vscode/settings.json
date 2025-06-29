@@ -4,6 +4,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
+  "files.exclude": {
+    "**/.git": false
+  },
   "eslint.validate": [
     "javascript",
     "javascriptreact",
