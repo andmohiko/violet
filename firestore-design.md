@@ -9,7 +9,7 @@
 ### 概要
 
 ```
-/transcripts/{transcriptsId}
+/transcripts/{transcriptId}
 ```
 
 - 音声データの書き起こし、要約データ
@@ -22,17 +22,12 @@
 
 ### 詳細
 
-### 保存フェーズ1（音声ファイル書き起こし時に保存）
-
 - createdAt: Timestamp DBに保存された日時
 - id: string {transcriptId（自動生成、ドキュメントIDと一致）}
 - storagePath: string Storage上でトリガーされたファイルのフルパス
 - text: string 書き起こしデータ
 - transcriptTotalTokens: number 書き起こし時に使用したgeminiAPIトークン数
 - uploadedBy: string アップロードしたUserのuid
-
-### 保存フェーズ2 (毎日00:00の定期要約時に保存)
-
 - summary: 書き起こしの要約データ
 - summaryTotalTokens: Number 要約時に使用したgeminiAPIトークン数
 - TotalTokens: Number 書き起こし＋要約時に使用したgeminiAPIトークン数
