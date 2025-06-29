@@ -13,7 +13,6 @@ import {
 
 type DownloadAudioResult = {
   tempFilePath: string;
-  timeCreated?: string;
 };
 
 const bucketName = process.env.STORAGE_BUCKET;
@@ -26,18 +25,12 @@ export async function downloadAudioFromStorage(
   filePath: string,
 ): Promise<DownloadAudioResult> {
   const bucket = getStorage().bucket(bucketName);
-  const [metadata] = await bucket.file(filePath).getMetadata();
 
-  // メタデータから作成日時を取得
-  let timeCreated: string | undefined = undefined;
-  if (metadata.timeCreated) {
-    timeCreated = new Date(metadata.timeCreated).toLocaleString('ja-JP');
-  }
   const tempFilePath = path.join(os.tmpdir(), path.basename(filePath));
   console.log(`Downloading ${filePath} to ${tempFilePath}`);
   await bucket.file(filePath).download({ destination: tempFilePath });
   console.log(`Downloaded ${filePath} successfully.`);
-  return { tempFilePath, timeCreated };
+  return { tempFilePath };
 }
 
 export const onAudioUpload = onObjectFinalized(
@@ -51,10 +44,7 @@ export const onAudioUpload = onObjectFinalized(
     console.log('onAudioUpload:', { filePath, contentType });
     console.log(`Content Type: ${contentType}`);
 
-    const { tempFilePath, timeCreated } =
-      await downloadAudioFromStorage(filePath);
-    console.log(`Temporary file path: ${tempFilePath}`);
-    console.log(`File created at: ${timeCreated}`);
+    const { tempFilePath } = await downloadAudioFromStorage(filePath);
     try {
       const apiAudioFile = await ai.files.upload({
         file: tempFilePath,
@@ -94,7 +84,6 @@ export const onAudioUpload = onObjectFinalized(
           const docRef = await db.collection('transcripts').add({
             storagePath: filePath,
             text: response.text,
-            timeCreated, // Firestorageに保存された際の作成日時(文字列型)
             uploadedBy: 'system',
             createdAt: serverTimestamp, //timestamp型での時刻保存
             transcriptTotalTokens: totalTokens, // 書き起こしのトークン数
