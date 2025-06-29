@@ -1,6 +1,6 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { summarizeYesterdayTranscripts } from '../lib/gemini/summarize';
-import { notifySlack } from '../triggers/notifySlack';
+import { notifySlack } from '../lib/Slack/notifySlack';
 
 export const dailySummary = onSchedule(
   {
