@@ -1,4 +1,4 @@
-import type { DownloadAudioResult } from '../../types/DownloadAudioResult';
+import type { DownloadAudioResult } from '~/types/DownloadAudioResult';
 import { getStorage } from 'firebase-admin/storage';
 import * as os from 'node:os';
 import * as path from 'node:path';
