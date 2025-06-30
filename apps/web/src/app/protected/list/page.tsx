@@ -8,8 +8,16 @@ import { TranscriptsSearchForm } from '~/components/TranscriptsSearchForm';
 
 const ListPage = () => {
   const { audioUrls, transcripts, loading, error } = useTranscripts();
-  const { filtered, searched, handleSearch } =
-    useSearchTranscripts(transcripts);
+  const {
+    keyword,
+    setKeyword,
+    date,
+    setDate,
+    filtered,
+    searched,
+    handleSearch,
+    resetSearch,
+  } = useSearchTranscripts(transcripts);
   const { modalOpen, modalTarget, openModal, closeModal } = useModalState();
 
   // 検索結果がある場合はフィルタリングされた結果を表示、なければ全てのtranscriptを表示
@@ -36,8 +44,12 @@ const ListPage = () => {
       {/* 検索 */}
       <div className="ml-10">
         <TranscriptsSearchForm
-          transcripts={transcripts}
-          onResult={handleSearch}
+          keyword={keyword}
+          setKeyword={setKeyword}
+          date={date}
+          setDate={setDate}
+          onSearch={handleSearch}
+          onReset={resetSearch}
         />
       </div>
       {/* モーダル */}
