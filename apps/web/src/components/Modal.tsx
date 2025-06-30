@@ -7,7 +7,7 @@ type ModalProps = {
   children: React.ReactNode;
 };
 
-const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
+const TranscriptModal: React.FC<ModalProps> = ({ open, onClose, children }) => {
   if (!open) return null;
 
   // 背景クリックで閉じる
@@ -39,4 +39,4 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
   );
 };
 
-export default Modal;
+export default TranscriptModal;
