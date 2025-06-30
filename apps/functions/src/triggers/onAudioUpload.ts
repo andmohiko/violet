@@ -1,5 +1,5 @@
 import { onObjectFinalized } from 'firebase-functions/v2/storage';
-import { downloadAudioFromStorage } from '../infrastructure/storage/downloadAudioFromStorage';
+import { downloadAudioFromStorage } from '~/infrastructure/storage/downloadAudioFromStorage';
 import { uploadToFileAPI } from '~/lib/gemini/uploadToFileApi';
 import { geminiTranscript } from '~/lib/gemini/geminiTranscript';
 import { saveTranscriptToFirestore } from '~/infrastructure/firestore/saveTranscripts';
