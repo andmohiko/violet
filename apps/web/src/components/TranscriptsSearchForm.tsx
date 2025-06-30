@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import type { Transcript } from '~/types/transcripts';
 import { Calendar } from '~/components/ui/calendar';
@@ -9,7 +11,10 @@ type Props = {
   onResult: (results: Transcript[]) => void;
 };
 
-const Search: React.FC<Props> = ({ transcripts, onResult }) => {
+export const TranscriptsSearchForm: React.FC<Props> = ({
+  transcripts,
+  onResult,
+}) => {
   const [keyword, setKeyword] = useState('');
   const [date, setDate] = useState<Date | undefined>(undefined);
 
@@ -76,5 +81,3 @@ const Search: React.FC<Props> = ({ transcripts, onResult }) => {
     </div>
   );
 };
-
-export default Search;

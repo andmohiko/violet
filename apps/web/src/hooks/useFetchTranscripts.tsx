@@ -1,9 +1,10 @@
+'use client';
 import { useState, useEffect } from 'react';
 import { useFirestore } from '~/infrastructure/firestore/DbProvider';
 import type { Transcript } from '~/types/transcripts';
 
 // firestoreからtranscriptsコレクションの全ドキュメントを取得するカスタムフック
-export const useTranscriptDocuments = () => {
+export const useFetchTranscripts = () => {
   const { getAllDocuments } = useFirestore();
   const [transcripts, setTranscripts] = useState<Transcript[]>([]);
   const [loading, setLoading] = useState(true);

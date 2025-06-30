@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect, useCallback } from 'react';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { storage } from '~/lib/firebase';
@@ -5,7 +6,7 @@ import type { Transcript } from '~/types/transcripts';
 
 // カスタムフック: transcriptsのstoragePathから音声ファイルのダウンロードURLを取得する
 
-export const useAudioUrls = (transcripts: Transcript[]) => {
+export const useTranscriptAudioUrls = (transcripts: Transcript[]) => {
   const [audioUrls, setAudioUrls] = useState<{ [id: string]: string }>({});
 
   const getAudioDownloadUrl = useCallback(async (path: string) => {
