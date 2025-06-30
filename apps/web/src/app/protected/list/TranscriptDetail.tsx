@@ -3,10 +3,10 @@ import { Button } from '~/components/ui/button';
 import { formatDate } from '~/utils/formatDate';
 import type { Transcript } from '~/types/transcripts';
 
-interface TranscriptDetailProps {
+type TranscriptDetailProps = {
   transcript: Transcript;
   audioUrl?: string;
-}
+};
 
 export const TranscriptDetail: React.FC<TranscriptDetailProps> = ({
   transcript,

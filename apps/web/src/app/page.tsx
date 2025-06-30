@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { ModeToggle } from '~/components/modeToggle';
+import { ModeToggle } from '~/components/ui/ModeToggle';
 import { SimpleLayout } from '~/components/Layouts/SimpleLayout';
 
 const IndexPage: NextPage = () => {

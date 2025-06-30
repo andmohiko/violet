@@ -2,7 +2,7 @@
 import { Button } from '~/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '~/providers/AuthProvider';
-import { ModeToggle } from './modeToggle';
+import { ModeToggle } from '../ui/ModeToggle';
 
 export const Header = () => {
   const router = useRouter();
