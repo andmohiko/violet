@@ -48,47 +48,51 @@ export async function summarizeYesterdayTranscripts() {
     const transcriptTotalTokens = doc.data().transcriptTotalTokens ?? 0;
     if (!text) continue;
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-1.5-flash',
-      contents: [
-        {
-          role: 'user',
-          parts: [
-            {
-              text: `以下の会議書き起こしを要約してください（日本語）:\n${text}`,
-            },
-          ],
+    try {
+      const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              {
+                text: `以下の会議書き起こしを要約してください（日本語）:\n${text}`,
+              },
+            ],
+          },
+        ],
+        config: {
+          systemInstruction:
+            'エンジニアが話した文章の書き起こしです。日本語で簡潔にまとめてください。',
         },
-      ],
-      config: {
-        systemInstruction:
-          'エンジニアが話した文章の書き起こしです。日本語で簡潔にまとめてください。',
-      },
-    });
-    // トークン数のログ出力
-    let summariesTotalTokens = 0;
-    if (response.usageMetadata) {
-      const promptTokens = response.usageMetadata.promptTokenCount ?? 0;
-      const responseTokens = response.usageMetadata.candidatesTokenCount ?? 0;
-      summariesTotalTokens = promptTokens + responseTokens;
-      console.log(
-        `Prompt tokens: ${promptTokens}, ` +
-          `Response tokens: ${responseTokens}, ` +
-          `Total tokens: ${summariesTotalTokens}`,
-      );
-    }
-    const totalTokens = summariesTotalTokens + transcriptTotalTokens;
-    const summary = response.text ?? '';
-    await db.collection('transcripts').doc(doc.id).update({
-      summary,
-      summaryTotalTokens: summariesTotalTokens, // 要約生成時のトークン数
-      totalTokens, // 書き起こし＋要約の合計トークン数
-    });
+      });
+      // トークン数のログ出力
+      let summariesTotalTokens = 0;
+      if (response.usageMetadata) {
+        const promptTokens = response.usageMetadata.promptTokenCount ?? 0;
+        const responseTokens = response.usageMetadata.candidatesTokenCount ?? 0;
+        summariesTotalTokens = promptTokens + responseTokens;
+        console.log(
+          `Prompt tokens: ${promptTokens}, ` +
+            `Response tokens: ${responseTokens}, ` +
+            `Total tokens: ${summariesTotalTokens}`,
+        );
+      }
+      const totalTokens = summariesTotalTokens + transcriptTotalTokens;
+      const summary = response.text ?? '';
+      await db.collection('transcripts').doc(doc.id).update({
+        summary,
+        summaryTotalTokens: summariesTotalTokens, // 要約生成時のトークン数
+        totalTokens, // 書き起こし＋要約の合計トークン数
+      });
 
-    summaries.push(
-      `書き起こし${count}\nFireStoreドキュメントID${doc.id}\n消費トークン総数${totalTokens}\n${summary}\n`,
-    );
-    count++;
+      summaries.push(
+        `書き起こし${count}\nFireStoreドキュメントID${doc.id}\n消費トークン総数${totalTokens}\n${summary}\n`,
+      );
+      count++;
+    } catch (error) {
+      console.error(`要約生成エラー (ドキュメントID: ${doc.id}):`, error);
+    }
   }
 
   return summaries.join('');
