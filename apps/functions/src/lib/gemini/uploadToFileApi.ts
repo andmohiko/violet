@@ -8,16 +8,21 @@ export async function uploadToFileAPI(
   tempFilePath: string,
   contentType: string,
 ) {
-  const apiAudioFile = await ai.files.upload({
-    file: tempFilePath,
-    config: { mimeType: contentType },
-  });
+  try {
+    const apiAudioFile = await ai.files.upload({
+      file: tempFilePath,
+      config: { mimeType: contentType },
+    });
 
-  console.log('ファイルがFileAPIにアップロードされました:', apiAudioFile.uri);
+    console.log('ファイルがFileAPIにアップロードされました:', apiAudioFile.uri);
 
-  if (!apiAudioFile.uri) {
-    throw new Error('Failed to upload file to Gemini API');
+    if (!apiAudioFile.uri) {
+      throw new Error('Failed to upload file to Gemini API');
+    }
+
+    return apiAudioFile;
+  } catch (error) {
+    console.error('ファイルアップロードエラー:', error);
+    throw error;
   }
-
-  return apiAudioFile;
 }

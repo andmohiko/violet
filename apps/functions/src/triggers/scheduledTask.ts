@@ -8,11 +8,15 @@ export const dailySummary = onSchedule(
     timeZone: 'Asia/Tokyo', // タイムゾーン
   },
   async () => {
-    const summary = await summarizeYesterdayTranscripts();
-    if (summary) {
-      console.log('要約結果:', summary);
-      await notifySlack(summary);
+    try {
+      const summary = await summarizeYesterdayTranscripts();
+      if (summary) {
+        console.log('要約結果:', summary);
+        await notifySlack(summary);
+      }
+      console.log('毎日00:00に実行される関数です');
+    } catch (error) {
+      console.error('定期実行エラー:', error);
     }
-    console.log('毎日00:00に実行される関数です');
   },
 );
