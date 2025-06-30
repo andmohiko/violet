@@ -1,10 +1,10 @@
 'use client';
-import { TranscriptModal } from '~/components/TranscriptModal';
-import { TranscriptTable } from '~/components/TranscriptTable';
+import { TranscriptModal } from '~/app/protected/list/TranscriptModal';
+import { TranscriptTable } from '~/app/protected/list/TranscriptTable';
 import { useTranscripts } from '~/hooks/useTranscripts';
 import { useSearchTranscripts } from '~/hooks/useSearchTranscripts';
 import { useModalState } from '~/hooks/useModalState';
-import { TranscriptsSearchForm } from '~/components/TranscriptsSearchForm';
+import { TranscriptsSearchForm } from '~/app/protected/list/TranscriptsSearchForm';
 
 const ListPage = () => {
   const { audioUrls, transcripts, loading, error } = useTranscripts();
