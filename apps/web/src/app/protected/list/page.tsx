@@ -6,9 +6,6 @@ import { useSearchTranscripts } from '~/hooks/useSearchTranscripts';
 import { useModalState } from '~/hooks/useModalState';
 import { TranscriptsSearchForm } from '~/components/TranscriptsSearchForm';
 
-console.log('Imported useSearchTranscripts:', useSearchTranscripts);
-console.log('Type:', typeof useSearchTranscripts);
-
 const ListPage = () => {
   const { audioUrls, transcripts, loading, error } = useTranscripts();
   const { filtered, searched, handleSearch } =
