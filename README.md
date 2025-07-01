@@ -1,6 +1,7 @@
-# Firebase Monorepo
+## 概要
 
-この README では、開発環境手順等にのみ言及します。
+このアプリは、音声ファイルをアップロードすると自動で文字起こしを行い、結果をFirestoreに保存します。  
+また、毎日自動で前日投稿されたデータの要約をSlackに通知する機能も備えています。
 
 ## パッケージ構成
 
@@ -176,3 +177,82 @@ HTTP Error: 400, Validation failed for trigger projects/test-f01cc/locations/us-
 ```sh
 firebase deploy --only functions
 ```
+
+## 技術スタック
+
+- フロントエンド：Next.js（App Router）
+- UIライブラリ：shadcn/ui
+- 言語：TypeScript
+- バックエンド：Cloud Functions for Firebase
+- データベース：Firestore
+- ストレージ：Cloud Storage for Firebase
+- 認証:Firebase Authentication
+- 外部API：geminiAPI
+- 通知：Slack Webhook
+- スケジューラ：Cloud Scheduler
+
+## インフラ構成
+
+本プロジェクトは以下のインフラサービス・構成で動作します。
+
+### 1. Firebase プロジェクト
+
+- **Authentication**  
+  メール/パスワード認証を利用し、ユーザー管理を行います。
+
+- **Firestore**  
+  書き起こしデータ（transcriptsコレクション）などのデータを保存します。  
+  [firestore-design.md](firestore-design.md) に設計詳細あり。
+
+- **Cloud Storage**  
+  音声ファイルをアップロード・保存します。  
+  StorageへのアップロードをトリガーにCloud FunctionsのonAudioUploadが動作します。
+
+- **Cloud Functions**
+  - 音声ファイルアップロード時の自動書き起こし（onAudioUpload関数）
+  - 毎日定時の要約・Slack通知（scheduledTask/dailySummary関数）
+
+### 2. 外部サービス
+
+- **Google Gemini API**  
+  音声ファイルの書き起こし・要約に利用します。
+
+- **Slack Webhook**  
+  毎日の要約結果をSlackに通知します。
+
+### 3. ディレクトリ構成
+
+- `apps/web` ... Next.js製Webアプリ
+- `apps/functions` ... Cloud Functions
+
+## アプリが解決すること
+
+音声メモや会話の内容は、録音だけでは後から確認や検索が難しいという課題があります。
+また、記録を共有したい場合にも、音声のままだと扱いにくく、業務効率が下がる原因になります。
+
+このアプリでは、音声データを自動で文字起こしし、見やすいテキストとして保存・管理できます。
+さらに、内容を要約した上でSlackに自動通知する機能により、振り返りもスムーズに行えます。
+
+## アプリが提供する機能
+
+### 1. メールアドレス／パスワードによる認証機能
+
+### 2. 録音ファイルアップロード
+
+.wav.mp3などの音声ファイルを手動でアップロード可能
+アップロードされたファイルは Firebase Storage に保存
+
+### 3. 自動文字起こし（音声→テキスト）
+
+アップロードされた音声を Gemini API を使って自動で文字起こし
+結果はテキストとメタデータとして Firestore に保存
+
+### 4. テキスト閲覧・検索機能
+
+保存された文字起こしを一覧表示
+フリーワード検索、日付検索で過去のメモ・会話内容を簡単に探せる
+
+### 5. 自動要約 & Slack通知（毎日0時に実行）
+
+前日にアップロードされたテキストをまとめて要約（Gemini APIを使用）
+要約内容を Slackの指定チャンネル に自動投稿
