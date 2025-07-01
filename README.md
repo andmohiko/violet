@@ -90,8 +90,8 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=measurementId
 
 1. プロジェクト画面の構築から Storage を選択
 2. **使ってみる** を選択
-3. 料金不要のロケーションを選択
-   - 場所: `US-CENTRAL1`
+3. ロケーションを選択
+   - ロケーションを選択してください
    - **本番環境モードで開始する** を選択して作成
 
 ##### 3-7. Functions の設定
@@ -108,6 +108,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=measurementId
 ```env
 DEV_GEMINI_API_KEY=google AI STUDIOで取得したgeminiAPIのAPIキー
 STORAGE_BUCKET=firebaseで作成した、firebaseConfig={}内のstorage_bucketの値
+CUSTOM_FUNCTIONS_REGION=Cloud Storageで設定したリージョン
 SLACK_WEBHOOK_URL=slackで取得したwebhookのurl
 ```
 
