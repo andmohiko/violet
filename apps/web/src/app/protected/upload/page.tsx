@@ -34,8 +34,10 @@ const UploadPage = () => {
       alert('アップロード完了');
     } catch (e) {
       console.error('アップロード失敗', e);
+      alert('アップロードに失敗しました。もう一度お試しください。');
+    } finally {
+      setUploading(false);
     }
-    setUploading(false);
   };
 
   return (
