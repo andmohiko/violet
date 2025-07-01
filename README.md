@@ -108,7 +108,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=measurementId
 ```env
 DEV_GEMINI_API_KEY=google AI STUDIOで取得したgeminiAPIのAPIキー
 STORAGE_BUCKET=firebaseで作成した、firebaseConfig={}内のstorage_bucketの値
-CUSTOM_FUNCTIONS_REGION=Cloud Storageで設定したリージョン
+CUSTOM_FUNCTION_REGION=Cloud Storageで設定したリージョン
 SLACK_WEBHOOK_URL=slackで取得したwebhookのurl
 ```
 
