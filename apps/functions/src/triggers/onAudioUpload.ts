@@ -4,11 +4,15 @@ import { uploadToFileAPI } from '~/lib/gemini/uploadToFileApi';
 import { geminiTranscript } from '~/lib/gemini/geminiTranscript';
 import { saveTranscriptToFirestore } from '~/infrastructure/firestore/saveTranscripts';
 import { cleanupTempFile } from '~/utils/cleanupTempFile';
+import { defineString } from 'firebase-functions/params';
+
+const customRegion = defineString('CUSTOM_FUNCTION_REGION');
+const storageBucket = defineString('STORAGE_BUCKET');
 
 export const onAudioUpload = onObjectFinalized(
   {
-    bucket: process.env.STORAGE_BUCKET,
-    region: process.env.CUSTOM_FUNCTIONS_REGION,
+    bucket: storageBucket,
+    region: customRegion,
   },
   async function main(event) {
     const filePath = event.data.name;

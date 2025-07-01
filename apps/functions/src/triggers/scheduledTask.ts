@@ -1,12 +1,15 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { summarizeYesterdayTranscripts } from '~/lib/gemini/summarize';
 import { notifySlack } from '~/lib/slack/notifySlack';
+import { defineString } from 'firebase-functions/params';
+
+const customRegion = defineString('CUSTOM_FUNCTION_REGION');
 
 export const dailySummary = onSchedule(
   {
     schedule: 'every day 00:00', // 毎日00:00に実行
     timeZone: 'Asia/Tokyo', // タイムゾーン
-    region: process.env.CUSTOM_FUNCTIONS_REGION,
+    region: customRegion,
   },
   async () => {
     try {
