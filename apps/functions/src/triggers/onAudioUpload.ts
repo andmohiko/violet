@@ -8,6 +8,7 @@ import { cleanupTempFile } from '~/utils/cleanupTempFile';
 export const onAudioUpload = onObjectFinalized(
   {
     bucket: process.env.STORAGE_BUCKET,
+    region: process.env.CUSTOM_FUNCTIONS_REGION,
   },
   async function main(event) {
     const filePath = event.data.name;
