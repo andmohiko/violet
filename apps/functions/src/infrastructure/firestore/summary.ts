@@ -36,7 +36,7 @@ export async function summarizeYesterdayTranscripts() {
       });
 
       summaries.push(
-        `書き起こし${count}\nFireStoreドキュメントID${doc.id}\n消費トークン総数${totalTokens}\n${summary}\n`,
+        `書き起こし${count}\nFireStoreドキュメントID:${doc.id}\n消費トークン総数:${totalTokens}\n${summary}\n`,
       );
       count++;
     } catch (error) {
