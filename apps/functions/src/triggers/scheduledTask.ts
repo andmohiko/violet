@@ -1,5 +1,5 @@
 import { onSchedule } from 'firebase-functions/v2/scheduler';
-import { summarizeYesterdayTranscripts } from '~/lib/gemini/summarize';
+import { summarizeYesterdayTranscripts } from '~/infrastructure/firestore/summary';
 import { notifySlack } from '~/lib/slack/notifySlack';
 import { defineString } from 'firebase-functions/params';
 
