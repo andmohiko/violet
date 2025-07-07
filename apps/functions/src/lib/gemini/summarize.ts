@@ -1,5 +1,7 @@
 import { GoogleGenAI } from '@google/genai';
 
+import { prompts } from './prompts';
+
 const ai = new GoogleGenAI({
   apiKey: process.env.DEV_GEMINI_API_KEY,
 });
@@ -20,8 +22,7 @@ export async function summarizeText(
       },
     ],
     config: {
-      systemInstruction:
-        'エンジニアが話した文章の書き起こしです。日本語で簡潔にまとめてください。',
+      systemInstruction: prompts.summarizePrompt,
     },
   });
 

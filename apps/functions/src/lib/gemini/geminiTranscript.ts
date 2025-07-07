@@ -4,6 +4,8 @@ import {
   createPartFromUri,
 } from '@google/genai';
 
+import { prompts } from './prompts';
+
 const ai = new GoogleGenAI({
   apiKey: process.env.DEV_GEMINI_API_KEY,
 });
@@ -25,8 +27,7 @@ export async function geminiTranscript(
         'Generate a transcript of the speech.',
       ]),
       config: {
-        systemInstruction:
-          'エンジニアの音声です。結果は日本語で生成してください。',
+        systemInstruction: prompts.transcriptsPrompt,
       },
     });
 
