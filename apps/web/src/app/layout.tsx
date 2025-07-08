@@ -19,12 +19,14 @@ export default function RootLayout({
     <html lang="ja" suppressHydrationWarning>
       <head />
       <body id="root">
-        <Providers>
-          <Header />
-          <div className="flex justify-center items-center w-full">
-            <div className="flex flex-col items-center">{children}</div>
-          </div>
-        </Providers>
+        <div>
+          <Providers>
+            <Header />
+            <div className="flex justify-center items-center w-full">
+              <div className="flex flex-col items-center">{children}</div>
+            </div>
+          </Providers>
+        </div>
       </body>
     </html>
   );
