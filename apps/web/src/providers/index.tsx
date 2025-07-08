@@ -12,19 +12,12 @@ type Props = {
 
 export const Providers = ({ children }: Props): React.ReactNode => {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      <LoadingProvider>
-        <AuthProvider>
-          <DbProvider>
-            <StorageProvider>{children}</StorageProvider>
-          </DbProvider>
-        </AuthProvider>
-      </LoadingProvider>
-    </ThemeProvider>
+    <LoadingProvider>
+      <AuthProvider>
+        <DbProvider>
+          <StorageProvider>{children}</StorageProvider>
+        </DbProvider>
+      </AuthProvider>
+    </LoadingProvider>
   );
 };

@@ -9,9 +9,9 @@ export const Header = () => {
   const { currentUser, logout } = useAuth();
 
   return (
-    <header className="sticky top-0 w-full py-10 bg-secondary shadow-md mb-16 z-10 isolation-auto">
+    <header className="sticky top-0 w-full py-8 bg-secondary shadow-md mb-16 z-10 isolation-auto">
       <div className="flex items-center justify-between max-w-full px-6">
-        <div className="text-5xl font-black tracking-tight flex items-center gap-2">
+        <div className="text-4xl font-black tracking-tight flex items-center gap-2">
           <span className="text-primary">TranscriptionApp</span>
         </div>
         <div className="flex items-center gap-6">
@@ -19,9 +19,9 @@ export const Header = () => {
             variant="default"
             size="lg"
             className="w-40 h-12 text-lg"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/protected/list')}
           >
-            ホーム
+            一覧
           </Button>
           <Button
             variant="default"
@@ -30,14 +30,6 @@ export const Header = () => {
             onClick={() => router.push('/protected/upload')}
           >
             アップロード
-          </Button>
-          <Button
-            variant="default"
-            size="lg"
-            className="w-40 h-12 text-lg"
-            onClick={() => router.push('/protected/list')}
-          >
-            一覧
           </Button>
           {currentUser ? (
             <Button
