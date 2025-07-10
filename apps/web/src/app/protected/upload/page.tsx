@@ -8,6 +8,7 @@ import { Skeleton } from '~/components/ui/skeleton';
 import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import { useAuth } from '~/providers/AuthProvider';
+import { useToast } from '~/hooks/useToast';
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -15,6 +16,7 @@ const UploadPage = () => {
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const { uploadFile } = useStorage();
   const { currentUser } = useAuth();
+  const { showSuccessToast, showErrorToast } = useToast();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
@@ -31,10 +33,17 @@ const UploadPage = () => {
         uploadedBy: currentUser?.uid ?? '',
       });
       setUploadedUrl(url);
-      alert('アップロード完了');
+      setFile(null);
+      showSuccessToast(
+        'アップロード完了',
+        '音声ファイルのアップロードが完了しました。',
+      );
     } catch (e) {
       console.error('アップロード失敗', e);
-      alert('アップロードに失敗しました。もう一度お試しください。');
+      showErrorToast(
+        'アップロードに失敗しました。',
+        'もう一度お試しください。',
+      );
     } finally {
       setUploading(false);
     }
@@ -87,20 +96,6 @@ const UploadPage = () => {
           )}
 
           {uploading && <Skeleton className="h-10 w-full" />}
-
-          {uploadedUrl && (
-            <div className="space-y-2 text-center">
-              <Separator />
-              <p className="text-green-600 font-semibold">
-                アップロードが完了しました！
-              </p>
-              <Button asChild variant="link" className="w-full text-center">
-                <a href={uploadedUrl} target="_blank" rel="noopener noreferrer">
-                  アップロードされた音声ファイルを開く
-                </a>
-              </Button>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>
