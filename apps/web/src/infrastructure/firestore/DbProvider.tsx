@@ -8,7 +8,10 @@ import {
   getDocs,
   doc,
   setDoc,
+  query,
+  orderBy,
 } from 'firebase/firestore';
+import type { CollectionReference, Query } from 'firebase/firestore';
 import type { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 
 type FirestoreContextType = {
@@ -16,6 +19,8 @@ type FirestoreContextType = {
   getDocument: (col: string, id: string) => Promise<DocumentData | undefined>;
   getAllDocuments: (
     col: string,
+    orderKey: string,
+    orderDirection: 'asc' | 'desc',
   ) => Promise<QueryDocumentSnapshot<DocumentData>[]>;
   setDocument: (
     col: string,
@@ -44,8 +49,18 @@ export const DbProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // コレクション全件取得
-  const getAllDocuments = async (col: string) => {
-    const snap = await getDocs(collection(db, col));
+  const getAllDocuments = async (
+    col: string,
+    orderKey: string,
+    orderDirection: 'asc' | 'desc' = 'desc',
+  ) => {
+    let q: Query | CollectionReference;
+    if (orderKey) {
+      q = query(collection(db, col), orderBy(orderKey, orderDirection));
+    } else {
+      q = collection(db, col);
+    }
+    const snap = await getDocs(q);
     return snap.docs;
   };
 

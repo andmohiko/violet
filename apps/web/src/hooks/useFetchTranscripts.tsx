@@ -15,7 +15,7 @@ export const useFetchTranscripts = () => {
       try {
         setLoading(true);
         setError(null);
-        const docs = await getAllDocuments('transcripts');
+        const docs = await getAllDocuments('transcripts', 'createdAt', 'desc');
         const data = docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
