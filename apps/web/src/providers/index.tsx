@@ -12,12 +12,14 @@ type Props = {
 
 export const Providers = ({ children }: Props): React.ReactNode => {
   return (
-    <LoadingProvider>
-      <AuthProvider>
-        <DbProvider>
-          <StorageProvider>{children}</StorageProvider>
-        </DbProvider>
-      </AuthProvider>
-    </LoadingProvider>
+    <MantineProvider>
+      <LoadingProvider>
+        <AuthProvider>
+          <DbProvider>
+            <StorageProvider>{children}</StorageProvider>
+          </DbProvider>
+        </AuthProvider>
+      </LoadingProvider>
+    </MantineProvider>
   );
 };
