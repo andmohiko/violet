@@ -32,17 +32,9 @@ const ListPage = () => {
   }
 
   return (
-    <div className="flex justify-between">
-      {/* Transcripts一覧 */}
-      <div className="mr-4">
-        <TranscriptTable
-          transcripts={displayTranscripts}
-          audioUrls={audioUrls}
-          onRowClick={openModal}
-        />
-      </div>
+    <div className="flex flex-col w-full">
       {/* 検索 */}
-      <div className="ml-10">
+      <div className="w-full px-8 mb-8">
         <TranscriptsSearchForm
           keyword={keyword}
           setKeyword={setKeyword}
@@ -52,6 +44,15 @@ const ListPage = () => {
           onReset={resetSearch}
         />
       </div>
+      {/* Transcripts一覧 */}
+      <div className="w-full px-8">
+        <TranscriptTable
+          transcripts={displayTranscripts}
+          audioUrls={audioUrls}
+          onRowClick={openModal}
+        />
+      </div>
+
       {/* モーダル */}
       <TranscriptModal
         open={modalOpen}
