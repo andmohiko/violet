@@ -9,7 +9,7 @@ type StorageContextType = {
     path: string,
     file: File,
     customMetadata?: Record<string, string>,
-  ) => Promise<string>;
+  ) => Promise<{ url: string; fileName: string }>;
 };
 
 const StorageContext = createContext<StorageContextType | undefined>(undefined);
@@ -26,9 +26,11 @@ export const StorageProvider: React.FC<{ children: React.ReactNode }> = ({
     const fileRef = ref(storage, path);
     const metadata = {
       customMetadata: customMetadata ?? {}, // userIdをメタデータとして渡す
+      fileName: file.name, // ファイル名をメタデータとして渡す
     };
     await uploadBytes(fileRef, file, metadata);
-    return getDownloadURL(fileRef);
+    const url = await getDownloadURL(fileRef);
+    return { url, fileName: file.name };
   };
 
   return (

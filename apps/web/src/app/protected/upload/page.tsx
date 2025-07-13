@@ -9,6 +9,7 @@ import { Button } from '~/components/ui/button';
 import { Separator } from '~/components/ui/separator';
 import { useAuth } from '~/providers/AuthProvider';
 import { useToast } from '~/hooks/useToast';
+import { useSaveUrlToFirestore } from '~/infrastructure/firestore/saveUrlToFirestore';
 
 const UploadPage = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -17,6 +18,7 @@ const UploadPage = () => {
   const { uploadFile } = useStorage();
   const { currentUser } = useAuth();
   const { showSuccessToast, showErrorToast } = useToast();
+  const { saveUrl } = useSaveUrlToFirestore();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
@@ -29,9 +31,14 @@ const UploadPage = () => {
     setUploading(true);
     try {
       // "uploads/" フォルダにファイル名で保存
-      const url = await uploadFile(`uploads/${file.name}`, file, {
+      const { url, fileName } = await uploadFile(`uploads/${file.name}`, file, {
         uploadedBy: currentUser?.uid ?? '',
       });
+
+      // FirestoreにURLを保存
+
+      await saveUrl(fileName);
+
       setUploadedUrl(url);
       setFile(null);
       showSuccessToast(
