@@ -1,4 +1,4 @@
-import { onObjectFinalized } from 'firebase-functions/v2/storage';
+import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 import { downloadAudioFromStorage } from '~/infrastructure/storage/downloadAudioFromStorage';
 import { uploadToFileAPI } from '~/lib/gemini/uploadToFileApi';
 import { geminiTranscript } from '~/lib/gemini/geminiTranscript';
@@ -7,19 +7,24 @@ import { cleanupTempFile } from '~/utils/cleanupTempFile';
 import { defineString } from 'firebase-functions/params';
 
 const customRegion = defineString('CUSTOM_FUNCTION_REGION');
-const storageBucket = defineString('STORAGE_BUCKET');
 
-export const onAudioUpload = onObjectFinalized(
+export const onAudioUpload = onDocumentCreated(
   {
-    bucket: storageBucket,
+    document: 'audios/{audioId}',
     region: customRegion,
   },
-  async function main(event) {
-    const filePath = event.data.name;
-    const contentType = event.data.contentType ?? 'application/octet-stream';
-    const uploadedBy = event.data.metadata?.uploadedBy ?? 'system';
+  async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.error('No data found in Firestore document.');
+      return;
+    }
 
-    console.log('onAudioUpload:', { filePath, contentType });
+    const docData = snapshot.data();
+
+    const filePath = docData.storagePath ?? '';
+    const uploadedBy = docData.userId ?? 'system';
+    const contentType = docData.contentType ?? 'application/octet-stream';
 
     const { tempFilePath } = await downloadAudioFromStorage(filePath);
 

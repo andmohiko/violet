@@ -31,13 +31,16 @@ const UploadPage = () => {
     setUploading(true);
     try {
       // "uploads/" フォルダにファイル名で保存
-      const { url, fileName } = await uploadFile(`uploads/${file.name}`, file, {
-        uploadedBy: currentUser?.uid ?? '',
-      });
+      const { url, filePath, userId, contentType } = await uploadFile(
+        `uploads/${file.name}`,
+        file,
+        {
+          uploadedBy: currentUser?.uid ?? '',
+        },
+      );
 
       // FirestoreにURLを保存
-
-      await saveUrl(fileName);
+      await saveUrl(filePath, userId, contentType, url);
 
       setUploadedUrl(url);
       setFile(null);
